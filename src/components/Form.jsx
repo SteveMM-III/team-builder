@@ -1,7 +1,43 @@
-// members list array of member objects
-// name email role
-
 import React, { useState } from 'react';
+import styled from 'styled-components';
+
+const StyledForm = styled.form`
+  width: 80%;
+  min-width: 300px;
+  max-width: 600px;
+  margin: 0 auto;
+`;
+
+const StyledFieldset = styled.fieldset`
+  position: relative;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  box-shadow: 0 0 8px rgba( 33, 33, 33, 0.8);
+`;
+
+const StyledLabel = styled.label`
+  margin: 1rem;
+`;
+
+const StyledInput = styled.input`
+  margin-left: 0.2rem;
+`;
+
+const StyledEmail = styled.input`
+  margin-left: 0.3rem;
+`;
+
+const StyledSelect = styled.select`
+  margin-left: 0.8rem;
+`;
+
+const StyledSubmit = styled.button`
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+`;
 
 const Form = ( props ) => {
   const [member, setMember] = useState( { name: '', email: '', role: ''} );
@@ -20,28 +56,28 @@ const Form = ( props ) => {
   };
 
   return (
-    <form onSubmit={ evt => submit(evt) }>
-      <fieldset>
-        <legend>Add Team Members:</legend>
-        <label>
-          Name:<input
+    <StyledForm onSubmit={ evt => submit(evt) }>
+      <StyledFieldset>
+        <h4>Add Team Members:</h4>
+        <StyledLabel>
+          Name:<StyledInput
             type='text'
             name='name'
             onChange={ handleChanges }
             id='nameInput'
-            value={member.name} /></label>
+            value={member.name} /></StyledLabel>
 
-        <label>
-          Email:<input
+        <StyledLabel>
+          Email:<StyledEmail
             type='text'
             name='email'
             onChange={ handleChanges }
             id='emailInput'
-            value={member.email} /></label>
+            value={member.email} /></StyledLabel>
 
-        <label>
+        <StyledLabel>
           Role:
-          <select
+          <StyledSelect
             onChange={ handleChanges }
             id='role'
             name='role'
@@ -58,13 +94,13 @@ const Form = ( props ) => {
               Jr. Backend Dev</option>
             <option>
               Sr. Backend Dev</option>
-          </select>
-        </label>
+          </StyledSelect>
+        </StyledLabel>
 
-        <button>Add Member</button>
-      </fieldset>
+        <StyledSubmit>Add Member</StyledSubmit>
+      </StyledFieldset>
 
-    </form>
+    </StyledForm>
   );
 };
 
