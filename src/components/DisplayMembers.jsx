@@ -32,7 +32,7 @@ const DisplayMembers = ( props ) => {
     <StyledMembers className='display-members'>
     {
       props.membersList.map( ( member, index ) => (
-        <StyledMember key='index' className='member'>
+        <StyledMember key={ member.id } className='member'>
           <h3>{ member.name }</h3>
 
           <dl>
@@ -41,6 +41,8 @@ const DisplayMembers = ( props ) => {
             <dt>
               { member.role  }</dt>
           </dl>
+          <button onClick={ () => props.setMemberToEdit( member ) }>
+            Edit</button>
         </StyledMember>
       ))
     }

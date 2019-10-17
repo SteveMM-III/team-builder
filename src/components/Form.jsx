@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import uuid from "uuid";
 
 const StyledForm = styled.form`
   width: 80%;
@@ -40,21 +41,46 @@ const StyledSubmit = styled.button`
 `;
 
 const Form = ( props ) => {
-  const [member, setMember] = useState( { name: '', email: '', role: ''} );
+  // const newId = uuid.v4();
+  
+  const [member, setMember] = useState( { id: '', name: '', email: '', role: ''} );
+  const [isEditing, setIsEditing] = useState( false );
 
   const setMembersList = props.setMembersList;
+  const editMember = props.editMember;
+
+  const setMemberToEdit = props.setMemberToEdit;
+
+  useEffect( () => {
+    if ( props.member ) {
+      setIsEditing( () => true );
+      setMember( () => { return { ...member, ...props.member } } );
+    } else {
+      setMember( () => { return { ...member, id: uuid.v4()   } } );
+    }
+      
+  }, [props.member]);
 
   const handleChanges = ( evt ) => {
     evt.preventDefault();
-    setMember( { ...member, [evt.target.name]: evt.target.value} );
+    setMember( { ...member, [ evt.target.name ]: evt.target.value } );
   };
 
   const submit = ( evt ) => {
     evt.preventDefault();
-    setMembersList( [...props.membersList, member] );
-    setMember( { name: '', email: '', role: '' } );
-  };
 
+    if ( isEditing ) {
+      editMember     ( member      );
+      setIsEditing   ( () => false );
+      setMemberToEdit( ''          );
+
+      setMember( { id: '', name: '', email: '', role: '' } );
+    } else {
+      setMembersList( [ ...props.membersList, member ] );
+      setMember     ( { id: uuid.v4(), name: '', email: '', role: '' } );
+    }
+  };
+  const buttonTxt = isEditing ? 'Update' : 'Add Member';
   return (
     <StyledForm onSubmit={ evt => submit(evt) }>
       <StyledFieldset>
@@ -63,25 +89,25 @@ const Form = ( props ) => {
           Name:<StyledInput
             type='text'
             name='name'
+            id  ='nameInput'
             onChange={ handleChanges }
-            id='nameInput'
-            value={member.name} /></StyledLabel>
+            value   ={ member.name   } /></StyledLabel>
 
         <StyledLabel>
           Email:<StyledEmail
             type='text'
             name='email'
+            id  ='emailInput'
             onChange={ handleChanges }
-            id='emailInput'
-            value={member.email} /></StyledLabel>
+            value   ={ member.email  } /></StyledLabel>
 
         <StyledLabel>
           Role:
           <StyledSelect
-            onChange={ handleChanges }
-            id='role'
+            id  ='role'
             name='role'
-            value={member.role}>
+            value   ={ member.role   }
+            onChange={ handleChanges }>
 
             <option />
             <option>
@@ -97,7 +123,7 @@ const Form = ( props ) => {
           </StyledSelect>
         </StyledLabel>
 
-        <StyledSubmit>Add Member</StyledSubmit>
+        <StyledSubmit>{ buttonTxt }</StyledSubmit>
       </StyledFieldset>
 
     </StyledForm>
